@@ -757,4 +757,332 @@ Parent Constructor → Child Constructor
 * Multiple inheritance via interfaces only
 
 ---
+# 🔷 Detailed Notes on `super` Keyword in Java
+
+## 📌 1. Introduction to `super`
+
+The `super` keyword in Java is a **reference variable** used to refer to the **immediate parent class object**.
+
+It is mainly used when **inheritance** is involved.
+
+👉 `super` helps resolve ambiguity when:
+
+* Parent and child class have same variable names
+* Parent and child class have same method names
+* Parent constructor needs to be called
+
+---
+
+# 📌 2. Why Do We Need `super`?
+
+When a subclass inherits from a superclass, it may:
+
+* Define variables with the same name
+* Override methods
+* Have its own constructor
+
+In such cases, `super` allows access to the **parent class version**.
+
+---
+
+# 📌 3. Uses of `super` Keyword
+
+There are **three main uses** of `super`:
+
+1. To access parent class variables
+2. To call parent class methods
+3. To call parent class constructors
+
+---
+
+# 🔹 1️⃣ Using `super` to Access Parent Class Variables
+
+When both parent and child class have a variable with the same name, the child class variable hides the parent class variable.
+
+### Example:
+
+```java
+class Person {
+    String name = "Parent Name";
+}
+
+class Student extends Person {
+    String name = "Child Name";
+
+    void display() {
+        System.out.println(name);         // Child variable
+        System.out.println(super.name);   // Parent variable
+    }
+}
+```
+
+### 🔎 Explanation:
+
+* `name` → Refers to child class variable
+* `super.name` → Refers to parent class variable
+
+This is called **variable hiding**.
+
+---
+
+# 🔹 2️⃣ Using `super` to Call Parent Class Method
+
+When a child class overrides a method of parent class, we can use `super` to call the parent version.
+
+### Example:
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal makes sound");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+
+    void display() {
+        sound();         // Calls Dog's sound()
+        super.sound();   // Calls Animal's sound()
+    }
+}
+```
+
+### 🔎 Explanation:
+
+* `sound()` → Calls overridden method in child
+* `super.sound()` → Calls parent class method
+
+This is useful when:
+
+* You want to extend parent functionality instead of completely replacing it.
+
+---
+
+# 🔹 3️⃣ Using `super()` to Call Parent Constructor
+
+`super()` is used inside child class constructor to call parent class constructor.
+
+### Example:
+
+```java
+class Animal {
+    Animal() {
+        System.out.println("Animal constructor called");
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        super();   // Calls Animal constructor
+        System.out.println("Dog constructor called");
+    }
+}
+```
+
+### Output:
+
+```
+Animal constructor called
+Dog constructor called
+```
+
+---
+
+# 📌 4. Important Rules About `super()`
+
+### ✅ Rule 1:
+
+`super()` must be the **first statement** in constructor.
+
+❌ Incorrect:
+
+```java
+Dog() {
+    System.out.println("Hello");
+    super();   // ERROR
+}
+```
+
+---
+
+### ✅ Rule 2:
+
+If you don’t write `super()`, Java automatically inserts it.
+
+```java
+Dog() {
+    System.out.println("Dog constructor");
+}
+```
+
+Internally Java adds:
+
+```java
+Dog() {
+    super();
+    System.out.println("Dog constructor");
+}
+```
+
+---
+
+### ✅ Rule 3:
+
+If parent has parameterized constructor, you must call it explicitly.
+
+```java
+class Animal {
+    Animal(String type) {
+        System.out.println("Type: " + type);
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        super("Domestic Animal");
+    }
+}
+```
+
+---
+
+# 📌 5. Constructor Chaining Using `super`
+
+When inheritance hierarchy exists, constructors execute in order:
+
+👉 Parent → Child
+
+Example:
+
+```java
+class A {
+    A() {
+        System.out.println("A constructor");
+    }
+}
+
+class B extends A {
+    B() {
+        super();
+        System.out.println("B constructor");
+    }
+}
+
+class C extends B {
+    C() {
+        super();
+        System.out.println("C constructor");
+    }
+}
+```
+
+### Output:
+
+```
+A constructor
+B constructor
+C constructor
+```
+
+This process is called **constructor chaining**.
+
+---
+
+# 📌 6. Difference Between `this` and `super`
+
+| `this`                          | `super`                        |
+| ------------------------------- | ------------------------------ |
+| Refers to current class object  | Refers to parent class object  |
+| Access current class variables  | Access parent class variables  |
+| Calls current class constructor | Calls parent class constructor |
+| Used within same class          | Used in subclass               |
+
+---
+
+# 📌 7. When `super` Cannot Be Used
+
+❌ In static methods
+Reason: Static methods belong to class, not object.
+
+❌ To access private members of parent
+Reason: Private members are not inherited.
+
+❌ Outside child class
+
+---
+
+# 📌 8. Memory Concept of `super`
+
+When child object is created:
+
+```java
+Dog d = new Dog();
+```
+
+Memory contains:
+
+* Parent part
+* Child part
+
+`super` refers to the **parent portion of the same object**.
+
+---
+
+# 📌 9. Real-Time Example
+
+```java
+class Employee {
+    double salary = 30000;
+}
+
+class Manager extends Employee {
+    double salary = 50000;
+
+    void showSalary() {
+        System.out.println("Manager Salary: " + salary);
+        System.out.println("Employee Salary: " + super.salary);
+    }
+}
+```
+
+Here:
+
+* `salary` → Manager salary
+* `super.salary` → Employee salary
+
+---
+
+# 📌 10. Exam / Viva Important Points
+
+✔ `super` is a keyword
+✔ Used only in subclass
+✔ Refers to immediate parent class
+✔ Used for variable, method, constructor
+✔ `super()` must be first statement
+✔ Cannot be used in static context
+
+---
+
+# 📌 11. Summary
+
+* `super` refers to parent class object.
+* Resolves ambiguity between parent and child members.
+* Calls parent constructor using `super()`.
+* Enables constructor chaining.
+* Must be used carefully as per Java rules.
+
+---
+
+If you want, I can also provide:
+
+* 🔹 10 Viva Questions on `super`
+* 🔹 MCQs with answers
+* 🔹 Programs with output-based questions
+* 🔹 Memory diagram explanation
+* 🔹 Difference between `super` and method overriding
+
+Just tell me 😊
 
