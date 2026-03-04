@@ -1086,3 +1086,390 @@ If you want, I can also provide:
 
 Just tell me 😊
 
+# 📘 Java Notes: Static Method, Static Field, and Final Keyword
+
+---
+
+# 🔷 1. Static Keyword in Java
+
+The **static keyword** in Java is used for **memory management**.
+It belongs to the **class rather than the object**.
+
+When a member is declared as `static`, it is **shared among all objects of the class**.
+
+Static can be used with:
+
+* Variables (Fields)
+* Methods
+* Blocks
+* Nested Classes
+
+Here we will focus on:
+
+* **Static Fields**
+* **Static Methods**
+
+---
+
+# 📌 2. Static Field (Static Variable)
+
+## 🔹 Definition
+
+A **static field** is a variable declared using the `static` keyword.
+It belongs to the **class**, not to individual objects.
+
+Only **one copy of the variable exists** and it is shared by all objects.
+
+---
+
+## 🔹 Syntax
+
+```java
+static datatype variableName;
+```
+
+---
+
+## 🔹 Example
+
+```java
+class Student {
+    int rollNo;
+    String name;
+    static String college = "DY Patil";
+
+    Student(int r, String n) {
+        rollNo = r;
+        name = n;
+    }
+
+    void display() {
+        System.out.println(rollNo + " " + name + " " + college);
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Student s1 = new Student(1, "Rahul");
+        Student s2 = new Student(2, "Amit");
+
+        s1.display();
+        s2.display();
+    }
+}
+```
+
+### Output
+
+```
+1 Rahul DY Patil
+2 Amit DY Patil
+```
+
+---
+
+## 🔹 Explanation
+
+Here:
+
+```
+static String college = "DY Patil";
+```
+
+* `college` is **common for all students**.
+* Only **one memory location** is created.
+* All objects share it.
+
+---
+
+## 🔹 Memory Concept
+
+```
+Class Area (Method Area)
+-------------------------
+college = "DY Patil"
+
+Heap Memory
+-------------------------
+s1 -> rollNo, name
+s2 -> rollNo, name
+```
+
+Static variables are stored in **class memory**, not in object memory.
+
+---
+
+# 📌 3. Static Method in Java
+
+## 🔹 Definition
+
+A **static method** belongs to the **class rather than the object**.
+It can be called **without creating an object**.
+
+---
+
+## 🔹 Syntax
+
+```java
+static returnType methodName()
+```
+
+---
+
+## 🔹 Example
+
+```java
+class MathUtil {
+
+    static int square(int x) {
+        return x * x;
+    }
+
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        int result = MathUtil.square(5);
+        System.out.println(result);
+
+    }
+}
+```
+
+### Output
+
+```
+25
+```
+
+---
+
+## 🔹 Explanation
+
+The method is called using:
+
+```
+ClassName.methodName()
+```
+
+Example:
+
+```
+MathUtil.square(5)
+```
+
+No object required.
+
+---
+
+# 📌 4. Rules of Static Methods
+
+### 1️⃣ Static method can access static variables directly
+
+```java
+static int a = 10;
+
+static void show() {
+    System.out.println(a);
+}
+```
+
+---
+
+### 2️⃣ Static method cannot access non-static variables directly
+
+❌ Example:
+
+```java
+int x = 10;
+
+static void show() {
+    System.out.println(x);  // ERROR
+}
+```
+
+Reason:
+Static methods belong to class, but non-static variables belong to objects.
+
+---
+
+### 3️⃣ Static method cannot use `this` or `super`
+
+Because `this` and `super` refer to objects.
+
+---
+
+### 4️⃣ Main method is static
+
+```
+public static void main(String[] args)
+```
+
+Reason:
+JVM calls it **without creating object**.
+
+---
+
+# 🔷 5. Final Keyword in Java
+
+The **final keyword** is used to **restrict modification**.
+
+It can be used with:
+
+* Variables
+* Methods
+* Classes
+
+---
+
+# 📌 6. Final Variable
+
+## 🔹 Definition
+
+A **final variable** is a constant whose value cannot be changed.
+
+---
+
+## 🔹 Example
+
+```java
+class Test {
+    final int x = 10;
+
+    void display() {
+        // x = 20;  ERROR
+        System.out.println(x);
+    }
+}
+```
+
+Once assigned, the value cannot change.
+
+---
+
+## 🔹 Convention
+
+Final variables are usually written in **UPPERCASE**.
+
+Example:
+
+```
+final double PI = 3.14;
+```
+
+---
+
+# 📌 7. Final Method
+
+## 🔹 Definition
+
+A **final method cannot be overridden** by a subclass.
+
+---
+
+## 🔹 Example
+
+```java
+class Parent {
+
+    final void show() {
+        System.out.println("Parent method");
+    }
+
+}
+
+class Child extends Parent {
+
+    // void show() {}  ERROR
+
+}
+```
+
+Child class cannot override the `show()` method.
+
+---
+
+# 📌 8. Final Class
+
+## 🔹 Definition
+
+A **final class cannot be inherited**.
+
+---
+
+## 🔹 Example
+
+```java
+final class Vehicle {
+    void run() {
+        System.out.println("Vehicle running");
+    }
+}
+
+class Car extends Vehicle {  // ERROR
+}
+```
+
+---
+
+## 🔹 Example from Java Library
+
+The **String class** is final.
+
+```
+public final class String
+```
+
+Reason:
+
+* Security
+* Immutability
+
+---
+
+# 📌 9. Difference Between Static and Final
+
+| Static                         | Final                                |
+| ------------------------------ | ------------------------------------ |
+| Belongs to class               | Cannot be modified                   |
+| Shared by all objects          | Value fixed                          |
+| Used for methods and variables | Used for variables, methods, classes |
+
+---
+
+# 📌 10. Summary
+
+### Static Field
+
+* Shared by all objects
+* Belongs to class
+
+### Static Method
+
+* Called using class name
+* No object required
+* Cannot access non-static data directly
+
+### Final Variable
+
+* Constant value
+
+### Final Method
+
+* Cannot be overridden
+
+### Final Class
+
+* Cannot be inherited
+
+---
+
+If you want, I can also give:
+
+* **MCQs on static and final**
+* **Tricky output-based questions**
+* **Interview questions**
+* **Memory diagrams**
+* **Short exam notes (5 marks / 10 marks)**.
